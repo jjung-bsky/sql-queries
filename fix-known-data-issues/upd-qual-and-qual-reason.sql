@@ -184,17 +184,17 @@ WHERE
 
 
 --7. TAG QUALITY/REASON OF SCENES LABELED MORE THAN ONCE
---6723
 UPDATE
     imagery_source
 SET
     quality = 'NEEDS_CORRECTION', quality_reason = ARRAY['duplicate_labels']
 WHERE
-    id IN (
+    img_archive_id IN (
         SELECT
             img_archive_id
         FROM
             scenes_with_mult_sources
+    );
             
 
 --8. TAG QUALITY/REASON OF OLD AND NEVER LABELED SOURCES
