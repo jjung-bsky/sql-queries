@@ -74,43 +74,7 @@ GROUP BY
     imagery_source.object_of_interest,
     imagery_source.dataset_name,
     imagery_source.uri
-HAVING COUNT(*) < 10 and (object_of_interest='aircraft' or object_of_interest is null);
-
-
-
---3. Make View for Scenes With Multiple Sources:
-DROP VIEW IF EXISTS scenes_with_mult_sources CASCADE;
-
-CREATE VIEW scenes_with_mult_sources AS
-SELECT
-    img_archive_id,
-    COUNT(DISTINCT object_of_interest)
-FROM
-    (
-        SELECT
-            cntsrc. *,
-            ims.id AS img_source_id,
-            ims.object_of_interest
-        FROM
-            (
-                SELECT
-                    img_archive_id,
-                    COUNT(*) AS sources_cnt
-                FROM
-                    imagery_source
-                WHERE
-                    img_archive_id IS NOT NULL
-                GROUP BY
-                    img_archive_id
-                HAVING
-                    COUNT(*) > 1
-            ) AS cntsrc
-            INNER JOIN imagery_source AS ims ON cntsrc.img_archive_id = ims.img_archive_id
-    ) as src_cnt
-GROUP BY
-    img_archive_id
-HAVING
-    COUNT(DISTINCT object_of_interest) = 1;
+HAVING COUNT(*) <= 2 and (object_of_interest='aircraft' or object_of_interest is null);
 
 
 --4. Make View for Old & Never Labeled Sources:
@@ -170,7 +134,7 @@ FROM
 UPDATE
     imagery_source
 SET
-    quality = 'NEEDS_CORRECTION', quality_reason = ARRAY['missing_labels']
+    quality = 'NEEDS_CORRECTION', quality_reason = array_append(quality_reason,'missing_labels')
 WHERE
     id IN (
         SELECT
@@ -189,7 +153,7 @@ WHERE
 UPDATE
     imagery_source
 SET
-    quality = 'NEEDS_CORRECTION', quality_reason = ARRAY['duplicate_labels']
+    quality = 'NEEDS_CORRECTION', quality_reason = array_append(quality_reason,'duplicate_labels')
 WHERE
     img_archive_id IN (
         SELECT
@@ -203,7 +167,7 @@ WHERE
 UPDATE
     imagery_source
 SET
-    quality = 'NEEDS_CORRECTION', quality_reason = ARRAY['missing_labels']
+    quality = 'NEEDS_CORRECTION', quality_reason = array_append(quality_reason,'missing_labels')
 WHERE
     id IN (
         SELECT
@@ -216,7 +180,7 @@ WHERE
 UPDATE
     imagery_source
 SET
-    quality = 'NEEDS_CORRECTION', quality_reason = ARRAY['invalid_geometries']
+    quality = 'NEEDS_CORRECTION', quality_reason = array_append(quality_reason,'invalid_geometries')
 WHERE
     id IN (
         SELECT
