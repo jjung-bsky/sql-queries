@@ -29,7 +29,7 @@ DROP VIEW IF EXISTS scenes_with_mult_sources3 CASCADE;
 CREATE VIEW scenes_with_mult_sources3 AS
 select scenes_with_mult_sources2.*
 from scenes_with_mult_sources2
-where id in (select imagery_source_id from imagery_label);
+where id not in (select imagery_source_id from imagery_label);
 
 
 select * from scenes_with_mult_sources3;
