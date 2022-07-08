@@ -25,11 +25,13 @@ where img_archive_id in (select img_archive_id from scenes_with_mult_sources);
 select * from scenes_with_mult_sources2;
 
 
+--We only want those sources that have been labeled. In other words, we don't want those
+--that were sent back for relabeling.
 DROP VIEW IF EXISTS scenes_with_mult_sources3 CASCADE;
 CREATE VIEW scenes_with_mult_sources3 AS
 select scenes_with_mult_sources2.*
 from scenes_with_mult_sources2
-where id not in (select imagery_source_id from imagery_label);
+where id in (select imagery_source_id from imagery_label);
 
 
 select * from scenes_with_mult_sources3;
