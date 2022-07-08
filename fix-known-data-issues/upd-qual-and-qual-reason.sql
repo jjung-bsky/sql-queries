@@ -182,7 +182,9 @@ WHERE
             medium_airport_few_labels
     );
 
+
 --7. TAG QUALITY/REASON OF SCENES LABELED MORE THAN ONCE
+--6723
 UPDATE
     imagery_source
 SET
@@ -190,10 +192,10 @@ SET
 WHERE
     id IN (
         SELECT
-            id
+            img_archive_id
         FROM
             scenes_with_mult_sources
-    );
+            
 
 --8. TAG QUALITY/REASON OF OLD AND NEVER LABELED SOURCES
 UPDATE
