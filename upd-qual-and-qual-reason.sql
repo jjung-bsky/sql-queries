@@ -47,18 +47,7 @@ FROM
     INNER JOIN imagery_source ON point_labels.imagery_source_id = imagery_source.id 
 
 
---7. TAG QUALITY/REASON OF SCENES LABELED MORE THAN ONCE
-UPDATE
-    imagery_source
-SET
-    quality = 'NEEDS_CORRECTION', quality_reason = array_append(quality_reason,'duplicate_labels')
-WHERE
-    img_archive_id IN (
-        SELECT
-            img_archive_id
-        FROM
-            scenes_with_mult_sources
-    );
+
             
 
 --8. TAG QUALITY/REASON OF OLD AND NEVER LABELED SOURCES
