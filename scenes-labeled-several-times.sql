@@ -55,6 +55,17 @@ where img_archive_id not in (select img_archive_id from mult_ooi);
 select * from scenes_with_mult_sources_final;
 --3,380 sources
 
+select *
+from scenes_with_mult_sources_final
+where 'old_never_labeled' = ANY(quality_reason);
+
+
+select distinct quality_reason from scenes_with_mult_sources_final
+
+
+
+
+
 
 --4. TAG QUALITY/REASON OF SCENES LABELED MORE THAN ONCE
 UPDATE

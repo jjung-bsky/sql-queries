@@ -54,7 +54,7 @@ FROM
 UPDATE
     imagery_source
 SET
-    quality = 'NEEDS_CORRECTION', quality_reason = array_append(quality_reason,'missing_labels')
+    quality = 'NEEDS_CORRECTION', quality_reason = array_append(quality_reason,'old_never_labeled')
 WHERE
     id IN (
         SELECT
